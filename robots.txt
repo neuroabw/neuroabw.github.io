@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://neuroabw.github.io/illuminated/sitemap.xml
+Sitemap: https://neuronaut.live/illuminated/sitemap.xml
