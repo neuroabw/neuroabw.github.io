@@ -213,6 +213,27 @@ section[id] { scroll-margin-top: 1rem; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .field { display: grid; gap: .42rem; }
 .field-full { grid-column: 1 / -1; }
+.checkbox-field {
+  grid-template-columns: 1.25rem 1fr;
+  align-items: start;
+  gap: .7rem;
+}
+.checkbox-field input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: .2rem;
+}
+.optional-note {
+  color: var(--moss);
+  font-weight: 400;
+}
+.honeypot-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 label { font-size: .84rem; font-weight: 700; }
 input, select, textarea {
   width: 100%;
@@ -225,6 +246,11 @@ input, select, textarea {
 textarea { min-height: 130px; resize: vertical; }
 .form-help { margin: .8rem 0 0; color: var(--moss); font-size: .82rem; }
 .form-message { min-height: 1.5em; margin: .8rem 0 0; font-weight: 600; }
+.form-message.is-error { color: #9f2b2b; }
+.form-message.is-success { color: #2f5a2f; }
+.form-message.is-warning { color: #7b5a1f; }
+input:disabled, select:disabled, textarea:disabled, button:disabled { opacity: .72; cursor: not-allowed; }
+#estimate-turnstile { min-height: 70px; }
 
 .faq-list { max-width: 880px; }
 details { border-top: 1px solid var(--line); }

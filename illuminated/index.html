@@ -161,7 +161,7 @@
           <h2 class="display">No measuring. No complicated appointment.</h2>
         </header>
         <div class="steps-grid">
-          <article class="step reveal"><h3>Send photos</h3><p>Complete the short request below. Your email app opens with the details prepared; attach clear photos and send.</p></article>
+          <article class="step reveal"><h3>Send your request</h3><p>Complete the short form below and submit directly from this page. Add property photos if you would like design guidance.</p></article>
           <article class="step reveal"><h3>Review your estimate</h3><p>We review the property, confirm the design direction, and provide a clear estimate before arranging a site visit if needed.</p></article>
           <article class="step reveal"><h3>Reserve installation</h3><p>A 50% deposit secures your installation date. We arrive prepared and handle the work with minimal disruption.</p></article>
         </div>
@@ -206,7 +206,7 @@
         <div class="estimate-copy reveal">
           <p class="eyebrow" style="color:#e5cf95">Free photo estimate</p>
           <h2 class="display">Show us the home.</h2>
-          <p>Complete the form and tap the button. A prepared email will open on your device. Attach the photos and send—no account, upload portal, or measuring required.</p>
+          <p>Complete the form and submit directly from this page. You can optionally add property photos for faster design guidance—no account, upload portal, or measuring required.</p>
           <ul class="photo-list">
             <li>Front of the home, photographed straight on</li>
             <li>Left and right sides you want included</li>
@@ -214,7 +214,7 @@
             <li>Inspiration photos, if you have them</li>
           </ul>
         </div>
-        <form class="estimate-form reveal" id="estimate-form" action="mailto:illuminated@neuronaut.live?subject=Free%20Photo%20Estimate%20Request" method="post" enctype="text/plain">
+        <form class="estimate-form reveal" id="estimate-form" method="post">
           <div class="form-grid">
             <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" maxlength="100" required></div>
             <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="30" required></div>
@@ -222,8 +222,13 @@
             <div class="field field-full"><label for="address">Property address</label><input id="address" name="address" type="text" autocomplete="street-address" maxlength="200" required></div>
             <div class="field"><label for="service">Service</label><select id="service" name="service" required><option value="">Choose one</option><option>Install lights I already own</option><option>Full-service holiday lighting</option><option>Signature or commercial design</option><option>Not sure yet</option></select></div>
             <div class="field"><label for="timing">Preferred timing</label><select id="timing" name="timing"><option>As soon as available</option><option>Before Thanksgiving</option><option>Early December</option><option>I am flexible</option></select></div>
+            <div class="field"><label for="contactMethod">Preferred contact method</label><select id="contactMethod" name="contactMethod" required><option value="">Choose one</option><option>Call</option><option>Text</option><option>Email</option></select></div>
+            <div class="field field-full"><label for="propertyPhotos">Property photos <span class="optional-note">(optional, up to 6)</span></label><input id="propertyPhotos" name="propertyPhotos" type="file" accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/jpeg,image/png,image/webp,image/heic,image/heif" multiple><p class="form-help">Optional: share up to 6 photos of the areas you want illuminated. We accept JPG, PNG, WebP, HEIC, and HEIF.</p></div>
             <div class="field field-full"><label for="notes">What would you like illuminated?</label><textarea id="notes" name="notes" maxlength="1200" placeholder="Roofline, porch, columns, trees, walkway, backyard, colors, or anything else we should know."></textarea></div>
-            <div class="field field-full"><button class="button button-gold button-large" type="submit">Request my free estimate</button><p class="form-help">This button opens your email app. Photos are attached there, so this website does not upload or retain your form information or images.</p><noscript><p class="form-help"><strong>JavaScript is off:</strong> submitting the form will use your device’s default email application. Attach your property photos before sending.</p></noscript><p class="form-message" id="form-message" role="status" aria-live="polite"></p></div>
+            <div class="field field-full checkbox-field"><input id="contactConsent" name="contactConsent" type="checkbox" required><label for="contactConsent">I agree that Illuminated Landscape &amp; Lighting may contact me about this estimate request.</label></div>
+            <div class="field field-full honeypot-field" aria-hidden="true"><label for="company">Company</label><input id="company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
+            <div class="field field-full"><label for="estimate-turnstile">Verification</label><div id="estimate-turnstile"></div><noscript><p class="form-help"><strong>JavaScript is required</strong> to complete verification and submit this estimate request.</p></noscript></div>
+            <div class="field field-full"><button class="button button-gold button-large" type="submit" data-submit-button>Request my free estimate</button><p class="form-help">Submit your information directly on this page. Property photos are optional and can be uploaded with your request.</p><p class="form-message" id="form-message" role="status" aria-live="polite" aria-atomic="true"></p></div>
           </div>
         </form>
       </div>
@@ -269,6 +274,7 @@
 
   <div class="mobile-cta"><a class="button button-gold" href="#estimate">Request my free estimate</a></div>
   <script src="js/config.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="js/main.js"></script>
 </body>
 </html>
