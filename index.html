@@ -22,6 +22,12 @@
       margin-bottom: 2rem;
       color: #555;
     }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
     a {
       display: inline-block;
       padding: 0.75rem 1.5rem;
@@ -34,11 +40,20 @@
     a:hover {
       background-color: #1a2c22;
     }
+    a.visits {
+      background-color: #1C2541;
+    }
+    a.visits:hover {
+      background-color: #11182c;
+    }
   </style>
 </head>
 <body>
   <h1>Neuronaut</h1>
   <p>This is the parent home for its projects and services.</p>
-  <a href="/illuminated/">Illuminated Landscape &amp; Lighting</a>
+  <div class="links">
+    <a class="visits" href="/visits/">Store Visit Tracker</a>
+    <a href="/illuminated/">Illuminated Landscape &amp; Lighting</a>
+  </div>
 </body>
 </html>
