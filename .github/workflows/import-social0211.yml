@@ -1,0 +1,42 @@
+name: Import social0211 exact image
+
+on:
+  push:
+    branches:
+      - social0211-final
+    paths:
+      - social0211/_import.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  import-image:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: social0211-final
+
+      - name: Download exact uploaded JPEG
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p social0211/assets
+          curl -L --fail --retry 3 --retry-delay 2 \
+            'https://at.adobe.com/27BUjg2JUZezZhQn' \
+            -o social0211/assets/walmart-0211-fall-mums.jpeg
+          echo 'a5c176da4eefd7ca0a39bae66f2320febdbb6370686d3733503464aa3aa48925  social0211/assets/walmart-0211-fall-mums.jpeg' | sha256sum -c -
+
+      - name: Commit exact asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add social0211/assets/walmart-0211-fall-mums.jpeg
+          git rm social0211/_import.trigger
+          git commit -m 'Add exact Hillsboro social image asset'
+          git push origin HEAD:social0211-final
