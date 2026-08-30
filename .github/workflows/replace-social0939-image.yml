@@ -1,0 +1,41 @@
+name: Replace social0939 exact image
+
+on:
+  push:
+    branches:
+      - social0939-image-replace
+    paths:
+      - social0939/_replace.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  replace-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: social0939-image-replace
+
+      - name: Download exact uploaded JPEG and verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p social0939/assets
+          curl -L --fail --retry 3 --retry-delay 2 \
+            'https://at.adobe.com/jvtnQvmGpinw67p0' \
+            -o social0939/assets/walmart-0939-fall-mums.jpg
+          echo 'df4062be4e1277f0cde2b9ea06d5c76c3945f62f8d3872245b529ff6b2dd96bd  social0939/assets/walmart-0939-fall-mums.jpg' | sha256sum -c -
+
+      - name: Commit exact replacement asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add social0939/assets/walmart-0939-fall-mums.jpg
+          git rm social0939/_replace.trigger
+          git commit -m 'Replace 0939 social image with exact uploaded photo'
+          git push origin HEAD:social0939-image-replace
