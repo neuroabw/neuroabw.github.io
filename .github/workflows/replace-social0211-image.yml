@@ -1,0 +1,46 @@
+name: Replace social0211 exact image
+
+on:
+  push:
+    branches:
+      - social0211-image-replace
+    paths:
+      - social0211/_replace.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  replace-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: social0211-image-replace
+
+      - name: Download exact uploaded JPEG and verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 \
+            'https://at.adobe.com/W6qkNr4d8wIGRoet' \
+            -o social0211/assets/walmart-0211-fall-mums.jpeg
+          echo '737b1e830d1dd369995169c247ef534ffeb2050173c68e3d29beb87971aec63c  social0211/assets/walmart-0211-fall-mums.jpeg' | sha256sum -c -
+
+      - name: Bump page image cache version
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i 's/walmart-0211-fall-mums\.jpeg?v=1/walmart-0211-fall-mums.jpeg?v=2/g' social0211/index.html
+
+      - name: Commit exact replacement asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add social0211/assets/walmart-0211-fall-mums.jpeg social0211/index.html
+          git rm social0211/_replace.trigger
+          git commit -m 'Replace 0211 social image with exact uploaded photo'
+          git push origin HEAD:social0211-image-replace
