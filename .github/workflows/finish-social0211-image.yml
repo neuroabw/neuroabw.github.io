@@ -23,7 +23,7 @@ jobs:
           PARTDIR='social0211/assets/.upload-parts'
           OUT='social0211/assets/hillsboro-mums-walmart.jpeg'
           HTML='social0211/index.html'
-          cat "$PARTDIR"/part-* > /tmp/hillsboro.b64
+          cat "$PARTDIR"/exact-* > /tmp/hillsboro.b64
           base64 -d /tmp/hillsboro.b64 > "$OUT"
           ACTUAL=$(git hash-object "$OUT")
           EXPECTED='408a2056d67b32daf83741002986f715cc7a73fe'
@@ -36,10 +36,15 @@ jobs:
           new='assets/hillsboro-mums-walmart.jpeg?v=1'
           if old not in s:
               raise SystemExit('Expected old image reference not found')
+          if s.count(old) != 2:
+              raise SystemExit(f'Expected exactly 2 old image references, found {s.count(old)}')
           s=s.replace(old,new)
+          if s.count(new) != 2:
+              raise SystemExit('New image reference was not written exactly twice')
           p.write_text(s)
           PY
-          rm -f "$PARTDIR"/part-*
+          rm -f "$PARTDIR"/exact-* "$PARTDIR"/part-* "$PARTDIR"/READY
+          rm -f .github/workflows/finish-social0211-image.yml
 
       - name: Commit finished social0211 update
         shell: bash
@@ -47,6 +52,6 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add social0211/index.html social0211/assets/hillsboro-mums-walmart.jpeg social0211/assets/.upload-parts
+          git add -A
           git commit -m 'Use final Hillsboro mum image for social0211'
           git push origin HEAD:main
