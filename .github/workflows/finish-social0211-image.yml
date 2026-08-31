@@ -1,0 +1,52 @@
+name: Finish social0211 image
+
+on:
+  push:
+    paths:
+      - 'social0211/assets/.upload-parts/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  finish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct exact JPEG and update page
+        shell: bash
+        run: |
+          set -euo pipefail
+          PARTDIR='social0211/assets/.upload-parts'
+          OUT='social0211/assets/hillsboro-mums-walmart.jpeg'
+          HTML='social0211/index.html'
+          cat "$PARTDIR"/part-* > /tmp/hillsboro.b64
+          base64 -d /tmp/hillsboro.b64 > "$OUT"
+          ACTUAL=$(git hash-object "$OUT")
+          EXPECTED='408a2056d67b32daf83741002986f715cc7a73fe'
+          test "$ACTUAL" = "$EXPECTED"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('social0211/index.html')
+          s=p.read_text()
+          old='assets/walmart-0211-fall-mums.jpeg?v=3'
+          new='assets/hillsboro-mums-walmart.jpeg?v=1'
+          if old not in s:
+              raise SystemExit('Expected old image reference not found')
+          s=s.replace(old,new)
+          p.write_text(s)
+          PY
+          rm -f "$PARTDIR"/part-*
+
+      - name: Commit finished social0211 update
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add social0211/index.html social0211/assets/hillsboro-mums-walmart.jpeg social0211/assets/.upload-parts
+          git commit -m 'Use final Hillsboro mum image for social0211'
+          git push origin HEAD:main
